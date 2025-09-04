@@ -3,3 +3,5 @@ pandas
 scikit-learn
 transformers
 torch
+numpy
+sentence-transformers
