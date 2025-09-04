@@ -16,7 +16,7 @@ Built with **Streamlit + Semantic Search (Sentence Transformers)**.
 - Sentence Transformers (semantic search)
 
 ## Live Demo
-👉 [Try SoulSync here](https://soulsync-app.streamlit.app)
+👉 [Try SoulSync here](https://soulsyncproject-2wine8h9vetsodxdfstez6.streamlit.app/)
 
 ## Screenshots
 (Add screenshots of your app UI)
