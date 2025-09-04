@@ -19,7 +19,8 @@ Built with **Streamlit + Semantic Search (Sentence Transformers)**.
 👉 [Try SoulSync here](https://soulsyncproject-2wine8h9vetsodxdfstez6.streamlit.app/)
 
 ## Screenshots
-(Add screenshots of your app UI)
+![SoulSync Demo](screenshots/Screenshot 2025-09-04 220749.png)
+
 
 ---
 ⭐ Built with love to bring nostalgia alive!
