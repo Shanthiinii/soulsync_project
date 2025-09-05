@@ -1,5 +1,5 @@
 import streamlit as st
-from recommender import load_dataset, semantic_recommend
+from recommender import load_dataset, recommend_from_text
 
 # Load dataset once
 df = load_dataset()
@@ -7,15 +7,17 @@ df = load_dataset()
 st.title("🎵 SoulSync - Mood-based Recommendations")
 
 # User inputs
-Emotion = st.text_input("Enter your mood (e.g., happy, sad, nostalgic):")
+user_input_text = st.text_area("How are you feeling today? (Write anything — we'll figure out your mood!)")
 category = st.selectbox(" Choose category:", ["All", "Books", "Songs", "Movies"])
 category = category.lower()
 
 if st.button("Get Recommendations"):
-    if not Emotion:
-        st.warning("Please enter your mood first.")
+    if not user_input_text:
+        st.warning("Please describe how you're feeling.")
     else:
-        recs = semantic_recommend(df, Emotion, category, top_k=3)
+        recs,detected_mood = recommend_from_text(df, user_input_text, category, top_k=3)
+        # 🧠 Display the detected mood to the user
+        st.info(f"Detected Mood: {detected_mood.capitalize()}")
 
         if recs and "message" in recs[0]:
             st.error(recs[0]["message"])

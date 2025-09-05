@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from sentence_transformers import SentenceTransformer, util
 from data_loader import load_combined_dataset
+from mood_classifier import classify_mood
 
 # Base directory (project root)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +30,17 @@ def load_dataset():
         )
     return df
 
+def recommend_from_text(df, user_input_text, category="all", top_k=3):
+    """
+    Takes raw user text (e.g., journal entry), classifies mood,
+    then recommends content based on that mood.
+    """
+    detected_mood = classify_mood(user_input_text)
+    print(f"Detected mood: {detected_mood}")
+    
+    recs=semantic_recommend(df, Emotion=detected_mood, category=category, top_k=top_k)
+    return recs,detected_mood
+
 
 def semantic_recommend(df, Emotion, category="all", top_k=3):
     Emotion = Emotion.strip()
@@ -51,6 +63,7 @@ def semantic_recommend(df, Emotion, category="all", top_k=3):
     # ---- If category = all → pick one best from each type ----
     if category == "all":
         recs_all = []
+        seen_titles = set()
         for t in ["book", "songs", "movie"]:
             subset = df[df["Type"] == t]
             if not subset.empty:
@@ -62,10 +75,12 @@ def semantic_recommend(df, Emotion, category="all", top_k=3):
                 # pick best unique result
                 best_idx = subset_scores.argmax().item()
                 best_rec = subset.iloc[best_idx].to_dict()
+                title = best_rec.get("Title", "").strip().lower()
 
                 # avoid duplicates
-                if best_rec not in recs_all:
+                if title and title not in seen_titles:
                     recs_all.append(best_rec)
+                    seen_titles.add(title)
 
         return recs_all
 
@@ -77,9 +92,12 @@ def semantic_recommend(df, Emotion, category="all", top_k=3):
 
     top_results = scores.topk(k=min(top_k, len(df)))
     recommendations = []
+    seen_titles = set()
     for idx in top_results.indices:
         rec = df.iloc[idx.item()].to_dict()
-        if rec not in recommendations:  # avoid duplicates
+        title = rec.get("Title", "").strip().lower()
+        if title and title not in seen_titles:
             recommendations.append(rec)
+            seen_titles.add(title)
 
     return recommendations
