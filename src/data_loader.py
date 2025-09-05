@@ -15,5 +15,3 @@ def load_combined_dataset():
 
 if __name__ == "__main__":
     df = load_combined_dataset()
-    print("Dataset Shape:", df.shape)
-    print("Sample Data:\n", df.head())

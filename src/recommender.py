@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from sentence_transformers import SentenceTransformer, util
+from data_loader import load_combined_dataset
 
 # Base directory (project root)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -11,7 +12,7 @@ DATA_PATH = os.path.join(BASE_DIR, "data", "combined_df.csv")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def load_dataset():
-    df = pd.read_csv(DATA_PATH)
+    df = load_combined_dataset()
 
     # Normalize Type column
     if "Type" in df.columns:
